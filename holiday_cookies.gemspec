@@ -30,9 +30,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "tux"
   spec.add_dependency "sinatra"
   spec.add_dependency "sqlite3"
-  spec.add_dependency "activerecord"
-  spec.add_dependency "sinatra-activerecord"
   spec.add_dependency "thin"
   spec.add_dependency "bcrypt"
+  spec.add_dependency "require_all"
 end
 
