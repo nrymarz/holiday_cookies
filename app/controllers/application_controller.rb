@@ -5,8 +5,17 @@ class ApplicationController < Sinatra::Base
         enable :sessions
         set :session_secret, "notasecret"
     end
-    
+
     get '/' do 
         erb :index
+    end
+
+    helpers do 
+        def logged_in?(session)
+            !!session[:user_id]
+        end
+        def current_user(session)
+            User.find(session[:user_id])
+        end
     end
 end
