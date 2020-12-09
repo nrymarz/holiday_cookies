@@ -1,7 +1,5 @@
-class Recipe < ActiveRecord::Base
-    has_many :ingredients
-    has_many :sub_recipes
-    belongs_to :user
+class User < ActiveRecord::Base
+    has_many :recipes
     def slug
         self.name.gsub(/[\s#$%()?\.]/,'-')
     end

@@ -13,6 +13,9 @@ class UsersController < ApplicationController
 
     post '/users' do 
     end
+
+    post '/users/:slug' do
+    end
     
     patch '/users/:slug' do
     end
