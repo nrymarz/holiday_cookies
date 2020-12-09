@@ -1,1 +1,6 @@
-<h2> USER PAGE </h2>
+<h2><%=@user.name%>'s Recipes </h2>
+<% @user.recipes.each do |recipe| %>
+    <a href='/recipes/<%=recipe.slug%>'> <%= recipe.name %> </a>
+<%end%>
+<br>
+<p><a href='/logout'> Log Out </a> </p>

@@ -1,14 +1,22 @@
 class UsersController < ApplicationController
     get '/users/:slug' do 
+        @user = User.find_by_slug(params[:slug])
         erb :'users/show'
     end
 
     get '/users' do 
+        @users = User.all
         erb :'users/index'
     end
 
     get '/signup' do
-        erb :'users/signup'
+        if !Helpers.logged_in?(session)
+            erb :'users/signup'
+        else
+            @error = "You are Already Logged In. 
+            Heres Your <a href='/users/#{Helpers.current_user(session).slug}'>Profile Page</a>"
+            erb :'users/signup'
+        end
     end
 
     post '/signup' do 

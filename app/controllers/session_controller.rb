@@ -1,10 +1,21 @@
 class SessionController < ApplicationController
     get '/login' do 
-        erb :'users/login'
+        if !Helpers.logged_in?(session)
+            erb :'users/login'
+        else
+            @error = "You are Already Logged In. 
+            Heres Your <a href='/users/#{Helpers.current_user(session).slug}'>Profile Page</a>"
+            erb :'users/login'
+        end
     end
 
     get '/logout' do
-        erb :'users/logout'
+        if Helpers.logged_in?(session)
+            erb :'users/logout'
+        else
+            @error = "You are not logged In. <a href='/login'>Log In</a>"
+            erb :'users/logout'
+        end
     end
     
     post '/logout' do
