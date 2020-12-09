@@ -1,1 +1,6 @@
+<% if Helpers.logged_in?(session) %>
+    <h3><a href='/logout'> Log Out </a> </h3>
+<% else %>
+    <h3><a href='/login'>Log In</a></h3>
+<% end %>
 <h2> Recipes </h2>
