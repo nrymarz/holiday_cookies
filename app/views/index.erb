@@ -1,7 +1,10 @@
 <% if !Helpers.logged_in?(session) %>
     <h3><a href='/login'>Log In</a> or <a href='/signup'>Sign Up</a></h3>
+<% else %>
+    <h3><a href='/recipes/new'>Create A Recipe</a>
+    or 
+    <a href="/users/<%= Helpers.current_user(session).slug %>">Visit Your Profile Page</a></h3>
 <% end %>
-
 <h2>Holiday Cookie Recipes</h2>
 <ul> <% @recipes.each do |recipe| %>
     <li> <a href='/recipes/<%=recipe.slug%>'><%= recipe.name %></a> By: <%=recipe.chef%></li>

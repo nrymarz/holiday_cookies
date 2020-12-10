@@ -6,18 +6,23 @@
         Total Baking Time:<input type='text' name='recipe[cook_time]'><br>
         Yield(servings):<input type='text' name='recipe[yield]'><br>
 
-        <h3>Directions:</h3>
-        <textarea name='recipe[directions]' rows='25' cols='100'>
-        Type Your Directions Here. Use Numbers with a '.' after to seperate directions.
+        <h3><label for='directions'>Directions:</label></h3>
+        <textarea name='recipe[directions]' rows='25' cols='100' id='directions'>
+        Type Your Directions Here. Use Numbers with a '.' after to delineate directions.
+        Seperate different parts of your recipe with subheaders wrapped in *'s. Start at 1. again
+        after using a subheader.
         Ex:
         1. Preheat oven to 350.
         2. Beat together butter and sugar.
         3. etc.
+        *Icing*
+        1.Mix powder sugar with soft butter
+        2.Stir together until well combined.
         </textarea>
 
         <h3>Ingredients:</h3>
         <textarea name='recipe[ingredients]' rows='25' cols='100'>
-        Type Your Ingredients Here. Use Numbers with a '.' after to seperate directions.
+        Type Your Ingredients Here. Use Numbers with a '.' after to seperate ingredients.
         Ex:
         1. 1/2 Stick Butter
         2. 2 Cups Flour

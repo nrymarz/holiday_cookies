@@ -1,6 +1,3 @@
-require 'nokogiri'
-require 'open-uri'
-require 'pry'
 class Scraper
     def self.make_doc(url)
         Nokogiri::HTML(URI.open(url))
