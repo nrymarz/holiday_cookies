@@ -1,5 +1,4 @@
 class Recipe < ActiveRecord::Base
-    has_many :ingredients
     has_many :sub_recipes
     belongs_to :user
     def slug

@@ -28,6 +28,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "shotgun"
   spec.add_development_dependency "pry"
   spec.add_development_dependency "tux"
+  spec.add_development_dependency "nokogiri"
+  spec.add_development_dependency "open-uri"
   spec.add_dependency "sinatra"
   spec.add_dependency "sqlite3"
   spec.add_dependency "thin"

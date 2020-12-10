@@ -1,13 +1,11 @@
 class RecipesController < ApplicationController
-    get '/recipes' do 
-        erb :'recipes/index'
-    end
 
     get '/recipes/new' do 
         erb :'recipes/new'
     end
 
     get '/recipes/:slug' do
+        @recipe = Recipe.find_by_slug(params[:slug])
         erb :'recipes/show'
     end
 

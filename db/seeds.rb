@@ -1,7 +1,5 @@
-recipes = {
-    recipe1: {
-        name: "Mashed Potatoes"
-        chef: "byron"
-        directions: "directions"
-    }
-}
+require_relative '../lib/holiday_cookies/scraper'
+require_relative '../config/environment'
+require 'nokogiri'
+require 'open-uri'
+Scraper.call
