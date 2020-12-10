@@ -1,5 +1,22 @@
 <h2><%= @recipe.name %></h2>
 <p>By: <%= @recipe.chef %></p>
+<p>Total Baking Time: <%= @recipe.cook_time %></p>
+<p>Yield: <%= @recipe.yield %></p>
+
+<h3><label for='ingredients'> Ingredients </label></h3>
+<ul id='ingredients'>
+<% @recipe.ingredients.split('---').each do |ingredient| %>
+    <li><%= ingredient %> </li>
+<% end %>
+</ul>
+<% @recipe.sub_recipes.each do |subrecipe| %>
+    <label for='<%subrecipe.name%>_ingredients'><%= subrecipe.name %> Ingredients </label>
+    <ul id = '<%subrecipe.name%>_directions'>
+    <% subrecipe.ingredients.split('--').each do |ingredient| %>
+        <li><%= ingredient %> </li>
+    <% end %>
+    </ul>
+<% end %>
 
 <h3><label for='directions'> Directions </label></h3>
 <ol id='directions'>
@@ -18,20 +35,4 @@
     <% end %>
 <% end %>
 
-<br>
-<br>
 
-<h3><label for='ingredients'> Ingredients </label></h3>
-<ul id='ingredients'>
-<% @recipe.ingredients.split('---').each do |ingredient| %>
-    <li><%= ingredient %> </li>
-<% end %>
-</ul>
-<% @recipe.sub_recipes.each do |subrecipe| %>
-    <label for='<%subrecipe.name%>_ingredients'><%= subrecipe.name %> Ingredients </label>
-    <ul id = '<%subrecipe.name%>_directions'>
-    <% subrecipe.ingredients.split('--').each do |ingredient| %>
-        <li><%= ingredient %> </li>
-    <% end %>
-    </ul>
-<% end %>

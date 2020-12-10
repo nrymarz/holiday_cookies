@@ -1,0 +1,29 @@
+<h2><%= @error %></h2>
+<%if Helpers.logged_in?(session) %>
+    <h2>Create A New Recipe</h2>
+    <form action='/recipes/new' method=POST>
+        Recipe Title:<input type='text' name='recipe[name]'><br>
+        Total Baking Time:<input type='text' name='recipe[cook_time]'><br>
+        Yield(servings):<input type='text' name='recipe[yield]'><br>
+
+        <h3>Directions:</h3>
+        <textarea name='recipe[directions]' rows='25' cols='100'>
+        Type Your Directions Here. Use Numbers with a '.' after to seperate directions.
+        Ex:
+        1. Preheat oven to 350.
+        2. Beat together butter and sugar.
+        3. etc.
+        </textarea>
+
+        <h3>Ingredients:</h3>
+        <textarea name='recipe[ingredients]' rows='25' cols='100'>
+        Type Your Ingredients Here. Use Numbers with a '.' after to seperate directions.
+        Ex:
+        1. 1/2 Stick Butter
+        2. 2 Cups Flour
+        3. etc.
+        </textarea>
+        <br>
+        <input type='submit' value='Create Recipe'>
+    </form>
+<%end%>
