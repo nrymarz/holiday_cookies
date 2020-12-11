@@ -1,10 +1,6 @@
 require 'sinatra'
 require 'require_all'
-require 'sqlite3'
-require 'thin'
-require 'active_record'
-require 'sinatra/activerecord'
-require 'bcrypt'
+
 ENV['SINATRA_ENV'] ||= 'development'
 
 require 'bundler/setup'

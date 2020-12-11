@@ -13,7 +13,7 @@ class Scraper
                 SubRecipe.create(subrecipe)
             end
             recipe[:sub_recipes] = sub_recipes
-            Recipe.create(recipe)
+            recipe = Recipe.create(recipe)
         end
     end
 
