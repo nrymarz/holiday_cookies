@@ -1,0 +1,31 @@
+h1{
+    color: red;
+    font-family: verdana;
+}
+
+p{
+    font-family: verdana;
+}
+#welcome{
+    text-align: center;
+}
+h2{
+    color: Darkgreen;
+    font-family: verdana;
+}
+label{
+    color: red;
+    font-family: verdana;
+}
+h3{
+    color: Green;
+    font-family: verdana;
+}
+li{
+    border-color: red;
+    font-family: Arial;
+    padding: 5px;
+}
+body{
+    background-color: lightcyan;
+}

@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
     validates :name, presence: true
     validates :name, uniqueness: true
     def slug
-        self.name.gsub(/[\s#$%()?\.]/,'-')
+        self.name.gsub(/[\s#$%()?'\.]/,'-')
     end
 
     def self.find_by_slug(slug)

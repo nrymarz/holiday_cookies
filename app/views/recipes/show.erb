@@ -11,7 +11,7 @@
 </ul>
 <% @recipe.sub_recipes.each do |subrecipe| %>
     <% if subrecipe.ingredients.size > 0 %>
-        <label for='<%subrecipe.name%>_ingredients'><%= subrecipe.name %> Ingredients </label>
+        <label for='<%subrecipe.name%>_ingredients'><%= subrecipe.name %>: </label>
         <ul id = '<%subrecipe.name%>_directions'>
         <% subrecipe.ingredients.split('---').each do |ingredient| %>
             <li><%= ingredient %> </li>
@@ -28,7 +28,7 @@
 </ol>
 <% @recipe.sub_recipes.each do |subrecipe| %>
     <% if subrecipe.directions.size > 0 %>
-        <label for='<%=subrecipe.name%>_directions'><%= subrecipe.name %> Directions </label>
+        <label for='<%=subrecipe.name%>_directions'><%= subrecipe.name %>: </label>
         <ol id = '<%=subrecipe.name%>_directions'>
         <% subrecipe.directions.split('---').each do |direction| %>
             <li><%= direction %> </li>
