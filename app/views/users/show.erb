@@ -1,7 +1,18 @@
-<h2><%=@user.name%>'s Recipes </h2>
-<% @user.recipes.each do |recipe| %>
-    <a href='/recipes/<%=recipe.slug%>'> <%= recipe.name %> </a> - <a href='/recipes/<%=recipe.slug%>/edit'>Edit</a>
+<%if Helpers.logged_in?(session) && Helpers.current_user(session) == @user %>
+    <h2>Your Recipes</h2>
+    <% @user.recipes.each do |recipe| %>
+        <a href='/recipes/<%=recipe.slug%>'> <%= recipe.name %> </a> 
+        - <a href='/recipes/<%=recipe.slug%>/edit'>Edit</a>
+        - <a href='/recipes/<%=recipe.slug%>/delete'>Delete</a>
+        <br>
+    <%end%>
     <br>
-<%end%>
-<br>
-<p><a href='/logout'> Log Out </a> </p>
+    <p><a href='/recipes/new'>Create New Recipe</a></p>
+    <p><a href='/logout'> Log Out </a> </p>
+<% else %>
+    <h2><%= @user.name %>'s Recipes</h2>
+    <% @user.recipes.each do |recipe| %>
+        <a href='/recipes/<%=recipe.slug%>'> <%= recipe.name %> </a> 
+        <br>
+    <%end%>
+<% end %>

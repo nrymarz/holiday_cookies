@@ -29,6 +29,16 @@ class RecipesController < ApplicationController
         end
     end
 
+    get '/recipes/:slug/delete' do
+        @recipe = Recipe.find_by_slug(params[:slug])
+        if Helpers.logged_in?(session) && Helpers.current_user(session) == @recipe.user
+            erb :'recipes/delete'
+        else
+            @error = "You must be the creator of this recipe to delete it."
+            erb :'recipes/delete'
+        end
+    end
+
     post '/recipes/new' do
         ingredients_details = Helpers.seperate_recipe_details(params[:recipe][:plain_ingredients])
         directions_details = Helpers.seperate_recipe_details(params[:recipe][:plain_directions])
@@ -101,5 +111,8 @@ class RecipesController < ApplicationController
     end
 
     delete '/recipes/:slug' do 
+        recipe = Recipe.find_by_slug(params[:slug])
+        recipe.destroy
+        redirect "/users/#{Helpers.current_user(session).slug}"
     end
 end

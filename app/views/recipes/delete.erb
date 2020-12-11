@@ -1,0 +1,8 @@
+<h2><%= @error %></h2>
+<%if Helpers.logged_in?(session) && Helpers.current_user(session) == @recipe.user %>
+    <h3>Are you sure you want to delete this recipe?</h3>
+    <form action='/recipes/<%=@recipe.slug%>' method=POST>
+        <input type='hidden' name="_method" value='delete'>
+        <input type='submit' value='Delete Recipe'>
+    </form>
+<% end %>
