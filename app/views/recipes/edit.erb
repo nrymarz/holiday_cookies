@@ -1,0 +1,22 @@
+<h2><%= @error %></h2>
+<%if Helpers.logged_in?(session) && Helpers.current_user(session) == @recipe.user %>
+    <h2>Edit Recipe</h2>
+    <form action='/recipes/<%=@recipe.slug%>' method=POST>
+        <input type = 'hidden' id='hidden' name="_method" value="patch">
+        Recipe Title:<input type='text' name='recipe[name]' value='<%=@recipe.name%>'><br>
+        Total Baking Time:<input type='text' name='recipe[cook_time]' value='<%=@recipe.cook_time%>'><br>
+        Yield(servings):<input type='text' name='recipe[yield]' value='<%=@recipe.yield%>'><br>
+
+        <h3><label for='directions'>Directions:</label></h3>
+        <textarea name='recipe[plain_directions]' rows='25' cols='100' id='directions'>
+        <%= @recipe.plain_directions %>
+        </textarea>
+
+        <h3>Ingredients:</h3>
+        <textarea name='recipe[plain_ingredients]' rows='25' cols='100'>
+        <%= @recipe.plain_ingredients %>
+        </textarea>
+        <br>
+        <input type='submit' value='Edit Recipe'>
+    </form>
+<%end%>

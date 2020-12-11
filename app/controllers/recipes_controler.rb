@@ -21,12 +21,17 @@ class RecipesController < ApplicationController
 
     get '/recipes/:slug/edit' do 
         @recipe = Recipe.find_by_slug(params[:slug])
-        erb :'recipes/edit'
+        if Helpers.logged_in?(session) && Helpers.current_user(session) == @recipe.user
+            erb :'recipes/edit'
+        else
+            @error = "You must be the creator of this recipe to edit it."
+            erb :'recipes/edit'
+        end
     end
 
     post '/recipes/new' do
-        ingredients_details = Helpers.seperate_recipe_details(params[:recipe][:ingredients])
-        directions_details = Helpers.seperate_recipe_details(params[:recipe][:directions])
+        ingredients_details = Helpers.seperate_recipe_details(params[:recipe][:plain_ingredients])
+        directions_details = Helpers.seperate_recipe_details(params[:recipe][:plain_directions])
         params[:recipe][:ingredients] = ingredients_details[:recipe]
         params[:recipe][:directions] = directions_details[:recipe]
             
@@ -52,7 +57,6 @@ class RecipesController < ApplicationController
             end
 
             recipe.save
-            binding.pry
             redirect "/recipes/#{recipe.slug}"
         else
             @error = "Please Provide Recipe with Title"
@@ -61,6 +65,39 @@ class RecipesController < ApplicationController
     end
 
     patch '/recipes/:slug' do 
+        ingredients_details = Helpers.seperate_recipe_details(params[:recipe][:plain_ingredients])
+        directions_details = Helpers.seperate_recipe_details(params[:recipe][:plain_directions])
+        params[:recipe][:ingredients] = ingredients_details[:recipe]
+        params[:recipe][:directions] = directions_details[:recipe]
+            
+        if params[:recipe][:name].size > 0
+            recipe = Recipe.find_by_slug(params[:slug])
+            recipe.update(params[:recipe])
+
+            ingredients_details.delete(:recipe)
+            directions_details.delete(:recipe)
+            recipe.sub_recipes.clear
+            ingredients_details.each do |key,value|
+                if directions_details.include?(key)
+                    subrecipe = SubRecipe.new(name: key.to_s, ingredients: value, directions:directions_details[key])
+                    directions_details.delete(key)
+                else
+                    subrecipe = SubRecipe.new(name: key.to_s, ingredients: value, directions: '')
+                end
+                recipe.sub_recipes << subrecipe
+            end
+            directions_details.each do |key,value|
+                subrecipe = SubRecipe.new(name: key.to_s, directions:value, ingredients: '')
+                recipe.sub_recipes << subrecipe
+            end
+            
+            recipe.save
+            redirect "/recipes/#{recipe.slug}"
+        else
+            @error = "Please Provide Recipe with Title"
+            @recipe = Recipe.find_by_slug(params[:slug])
+            erb :"/recipes/edit"
+        end
     end
 
     delete '/recipes/:slug' do 

@@ -12,10 +12,8 @@ class Helpers
         sub_recipes = string.scan(/\*\w+\*/)
         sub_recipes.each do |sub_recipe|
             sub_recipe_details = string.split(sub_recipe).last
-            next_sub_recipe = sub_recipe_details.match(/\*\w+\*/)
-            if next_sub_recipe
-                sub_recipe_details = sub_recipe_details.match(/.+\*\w+\*/).to_s
-                sub_recipe_details.delete(next_sub_recipe.to_s)
+            if sub_recipe_details.match(/\*\w+\*/)
+                sub_recipe_details = sub_recipe_details.split(/\*\w+\*/).first
             end
             sub_recipe.delete!('*')
             details[sub_recipe.to_sym] = split_by_numbers(sub_recipe_details).join('---')
