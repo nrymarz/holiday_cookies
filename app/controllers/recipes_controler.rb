@@ -40,34 +40,25 @@ class RecipesController < ApplicationController
     end
 
     post '/recipes/new' do
-        ingredients_details = Helpers.seperate_recipe_details(params[:recipe][:plain_ingredients])
-        directions_details = Helpers.seperate_recipe_details(params[:recipe][:plain_directions])
-        params[:recipe][:ingredients] = ingredients_details[:recipe]
-        params[:recipe][:directions] = directions_details[:recipe]
+        details = Helpers.build_hash_with_directions_and_ingredients(params[:recipe][:plain_directions],params[:recipe][:plain_ingredients])
+        params[:recipe][:ingredients] = details[:recipe][:ingredients].collect{|ingredient| Ingredient.new(content: ingredient)}
+        params[:recipe][:directions] = details[:recipe][:directions].collect{|direction| Direction.new(content: direction)}
             
         if params[:recipe][:name].size > 0
             recipe = Recipe.create(params[:recipe])
             recipe.chef = Helpers.current_user(session).name
             recipe.user = Helpers.current_user(session)
 
-            ingredients_details.delete(:recipe)
-            directions_details.delete(:recipe)
-            ingredients_details.each do |key,value|
-                if directions_details.include?(key)
-                    subrecipe = SubRecipe.new(name: key.to_s, ingredients: value, directions:directions_details[key])
-                    directions_details.delete(key)
-                else
-                    subrecipe = SubRecipe.new(name: key.to_s, ingredients: value, directions: '')
-                end
-                recipe.sub_recipes << subrecipe
+            details.delete(:recipe)
+            details.each do |key,value|
+                sub_recipe = SubRecipe.new(name: key.to_s)
+                sub_recipe.directions = value[:directions].collect{|direction| Direction.new(content: direction)} if value[:directions]
+                sub_recipe.ingredients = value[:ingredients].collect{|ingredient| Ingredient.new(content: ingredient)} if value[:ingredients]
+                recipe.sub_recipes << sub_recipe
             end
-            directions_details.each do |key,value|
-                subrecipe = SubRecipe.new(name: key.to_s, directions:value, ingredients: '')
-                recipe.sub_recipes << subrecipe
-            end
-
             recipe.save
             redirect "/recipes/#{recipe.slug}"
+
         else
             @error = "Please Provide Recipe with Title"
             erb :'recipes/new'
@@ -75,32 +66,22 @@ class RecipesController < ApplicationController
     end
 
     patch '/recipes/:slug' do 
-        ingredients_details = Helpers.seperate_recipe_details(params[:recipe][:plain_ingredients])
-        directions_details = Helpers.seperate_recipe_details(params[:recipe][:plain_directions])
-        params[:recipe][:ingredients] = ingredients_details[:recipe]
-        params[:recipe][:directions] = directions_details[:recipe]
+        details = Helpers.build_hash_with_directions_and_ingredients(params[:recipe][:plain_directions],params[:recipe][:plain_ingredients])
+        params[:recipe][:ingredients] = details[:recipe][:ingredients].collect{|ingredient| Ingredient.new(content: ingredient)}
+        params[:recipe][:directions] = details[:recipe][:directions].collect{|direction| Direction.new(content: direction)}
             
         if params[:recipe][:name].size > 0
             recipe = Recipe.find_by_slug(params[:slug])
             recipe.update(params[:recipe])
 
-            ingredients_details.delete(:recipe)
-            directions_details.delete(:recipe)
+            details.delete(:recipe)
             recipe.sub_recipes.clear
-            ingredients_details.each do |key,value|
-                if directions_details.include?(key)
-                    subrecipe = SubRecipe.new(name: key.to_s, ingredients: value, directions:directions_details[key])
-                    directions_details.delete(key)
-                else
-                    subrecipe = SubRecipe.new(name: key.to_s, ingredients: value, directions: '')
-                end
-                recipe.sub_recipes << subrecipe
+            details.each do |key,value|
+                sub_recipe = SubRecipe.new(name: key.to_s)
+                sub_recipe.directions = value[:directions].collect{|direction| Direction.new(content: direction)} if value[:directions]
+                sub_recipe.ingredients = value[:ingredients].collect{|ingredient| Ingredient.new(content: ingredient)} if value[:ingredients]
+                recipe.sub_recipes << sub_recipe
             end
-            directions_details.each do |key,value|
-                subrecipe = SubRecipe.new(name: key.to_s, directions:value, ingredients: '')
-                recipe.sub_recipes << subrecipe
-            end
-            
             recipe.save
             redirect "/recipes/#{recipe.slug}"
         else

@@ -7,6 +7,33 @@ class Helpers
         User.find(session[:user_id])
     end
 
+    def self.build_hash_with_directions_and_ingredients(directions_string,ingredients_string)
+        directions = seperate_recipe_details(directions_string)
+        ingredients = seperate_recipe_details(ingredients_string)
+        hash = {}
+        directions.each do |key,value|
+            if hash[key]
+                hash[key][:directions] = value
+            else
+                hash[key] = {}
+                hash[key][:directions] = value
+            end
+            if ingredients.include?(key)
+                hash[key][:ingredients] = ingredients[key]
+                ingredients.delete(key)
+            end
+        end
+        ingredients.each do |key,value|
+            if hash[key]
+                hash[key][:ingredients] = value
+            else
+                hash[key] = {}
+                hash[key][:ingredients] = value
+            end
+        end
+        hash
+    end
+
     def self.seperate_recipe_details(string)
         details = {}
         sub_recipes = string.scan(/\*\w+\*/)
@@ -16,13 +43,13 @@ class Helpers
                 sub_recipe_details = sub_recipe_details.split(/\*\w+\*/).first
             end
             sub_recipe.delete!('*')
-            details[sub_recipe.to_sym] = split_by_numbers(sub_recipe_details).join('---')
+            details[sub_recipe.to_sym] = split_by_numbers(sub_recipe_details)
         end
         recipe_details = string.split(/\*\w+\*/).first
         if recipe_details.size > 0 
-            details[:recipe] = split_by_numbers(recipe_details).join('---')
+            details[:recipe] = split_by_numbers(recipe_details)
         else
-            details[:recipe] = ''
+            details[:recipe] = []
         end
         details
     end

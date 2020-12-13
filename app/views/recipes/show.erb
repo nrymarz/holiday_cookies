@@ -5,16 +5,16 @@
 
 <h3><label for='ingredients'> Ingredients </label></h3>
 <ul id='ingredients'>
-<% @recipe.ingredients.split('---').each do |ingredient| %>
-    <li><%= ingredient %> </li>
+<% @recipe.ingredients.each do |ingredient| %>
+    <li><%= ingredient.content %> </li>
 <% end %>
 </ul>
 <% @recipe.sub_recipes.each do |subrecipe| %>
     <% if subrecipe.ingredients.size > 0 %>
         <label for='<%subrecipe.name%>_ingredients'><%= subrecipe.name %>: </label>
         <ul id = '<%subrecipe.name%>_directions'>
-        <% subrecipe.ingredients.split('---').each do |ingredient| %>
-            <li><%= ingredient %> </li>
+        <% subrecipe.ingredients.each do |ingredient| %>
+            <li><%= ingredient.content %> </li>
         <% end %>
         </ul>
     <% end %>
@@ -22,16 +22,16 @@
 
 <h3><label for='directions'> Directions </label></h3>
 <ol id='directions'>
-<% @recipe.directions.split('---').each do |direction| %>
-    <li><%= direction %> </li>
+<% @recipe.directions.each do |direction| %>
+    <li><%= direction.content %> </li>
 <% end %>
 </ol>
 <% @recipe.sub_recipes.each do |subrecipe| %>
     <% if subrecipe.directions.size > 0 %>
         <label for='<%=subrecipe.name%>_directions'><%= subrecipe.name %>: </label>
         <ol id = '<%=subrecipe.name%>_directions'>
-        <% subrecipe.directions.split('---').each do |direction| %>
-            <li><%= direction %> </li>
+        <% subrecipe.directions.each do |direction| %>
+            <li><%= direction.content %> </li>
         <% end %>
         </ol>
     <% end %>

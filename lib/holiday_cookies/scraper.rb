@@ -8,13 +8,28 @@ class Scraper
         recipe_docs = find_recipes(url)
         recipe_hashes = build_recipe_hashes(recipe_docs)
         recipe_hashes.each do |recipe|
-            recipe.delete(:link)
-            sub_recipes = recipe[:sub_recipes].collect do |subrecipe|
-                SubRecipe.create(subrecipe)
+            recipe[:recipe].delete(:link)
+            sub_recipes = recipe[:recipe][:sub_recipes].collect do |subrecipe|
+                new_subrecipe = SubRecipe.create(name: subrecipe[:name])
+                add_directions_and_ingredients(subrecipe[:ingredients],subrecipe[:directions],new_subrecipe)
             end
-            recipe[:sub_recipes] = sub_recipes
-            recipe = Recipe.create(recipe)
+            recipe[:recipe][:sub_recipes] = sub_recipes
+            new_recipe = Recipe.create(recipe[:recipe])
+            add_directions_and_ingredients(recipe[:ingredients],recipe[:directions],new_recipe)
         end
+    end
+
+    def self.add_directions_and_ingredients(ingredients,directions,recipe)
+        ingredients.each do |ingredient|
+            new_ingredient = Ingredient.create(content: ingredient)
+            recipe.ingredients << new_ingredient
+        end
+        directions.each do |direction|
+            new_direction = Direction.create(content: direction)
+            recipe.directions << new_direction
+        end
+        recipe.save
+        recipe
     end
 
     def self.build_recipe_hashes(recipe_docs)
@@ -27,7 +42,8 @@ class Scraper
         end
         recipe_hashes.collect do |recipe|
             recipe_info = get_recipe_info(recipe[:link])
-            recipe.merge(recipe_info)
+            recipe_info[:recipe].merge!(recipe)
+            recipe_info
         end
     end
 
@@ -45,11 +61,13 @@ class Scraper
         sub_recipes = get_subrecipes(doc)
         directions = get_directions(doc)
         {
-            ingredients: ingredients.join('---'),
-            cook_time: total_cook_time ? total_cook_time.text.strip : 'n/a',
-            yield: yeld ? yeld.text : 'n/a',
-            sub_recipes: sub_recipes,
-            directions: directions.join('---')
+            ingredients: ingredients,
+            recipe: {
+                cook_time: total_cook_time ? total_cook_time.text.strip : 'n/a',
+                yield: yeld ? yeld.text : 'n/a',
+                sub_recipes: sub_recipes
+            },
+            directions: directions
         }
     end
 
@@ -82,8 +100,8 @@ class Scraper
         sub_recipes.collect do |recipe|
             {
                 name: recipe.text.strip.chomp(':'),
-                ingredients: self.get_ingredients_list(doc,recipe).join('---'),
-                directions: self.get_directions(doc,recipe).join('---')
+                ingredients: self.get_ingredients_list(doc,recipe),
+                directions: self.get_directions(doc,recipe)
             }
         end
     end
