@@ -36,16 +36,16 @@ class Helpers
 
     def self.seperate_recipe_details(string)
         details = {}
-        sub_recipes = string.scan(/\*\w+\*/)
+        sub_recipes = string.scan(/\*.+\*/)
         sub_recipes.each do |sub_recipe|
             sub_recipe_details = string.split(sub_recipe).last
-            if sub_recipe_details.match(/\*\w+\*/)
-                sub_recipe_details = sub_recipe_details.split(/\*\w+\*/).first
+            if sub_recipe_details.match(/\*.+\*/)
+                sub_recipe_details = sub_recipe_details.split(/\*.+\*/).first
             end
-            sub_recipe.delete!('*')
+            sub_recipe.delete!('*').strip!
             details[sub_recipe.to_sym] = split_by_numbers(sub_recipe_details)
         end
-        recipe_details = string.split(/\*\w+\*/).first
+        recipe_details = string.split(/\*.+\*/).first
         if recipe_details.size > 0 
             details[:recipe] = split_by_numbers(recipe_details)
         else
