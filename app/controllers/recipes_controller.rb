@@ -69,7 +69,7 @@ class RecipesController < ApplicationController
         details = Helpers.build_hash_with_directions_and_ingredients(params[:recipe][:plain_directions],params[:recipe][:plain_ingredients])
         params[:recipe][:ingredients] = details[:recipe][:ingredients].collect{|ingredient| Ingredient.new(content: ingredient)}
         params[:recipe][:directions] = details[:recipe][:directions].collect{|direction| Direction.new(content: direction)}
-            
+
         if params[:recipe][:name].size > 0
             recipe = Recipe.find_by_slug(params[:slug])
             recipe.update(params[:recipe])

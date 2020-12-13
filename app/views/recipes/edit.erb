@@ -9,12 +9,12 @@
 
         <h3><label for='directions'>Directions:</label></h3>
         <textarea name='recipe[plain_directions]' rows='25' cols='100' id='directions'>
-        <%= @recipe.plain_directions.strip! %>
+        <%= @recipe.plain_directions.strip %>
         </textarea>
 
         <h3>Ingredients:</h3>
         <textarea name='recipe[plain_ingredients]' rows='25' cols='100'>
-        <%= @recipe.plain_ingredients.strip! %>
+        <%= @recipe.plain_ingredients.strip %>
         </textarea>
         <br>
         <input type='submit' value='Edit Recipe'>
